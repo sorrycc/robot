@@ -121,10 +121,18 @@ var twitter = (function() {
             get('/lists/statuses.json?list_id='+id+'&per_page=200', callback);
         },
         getFavorites: function(callback) {
-            get('')
+            get('/favorites.json?count=100', callback);
         }
     };
 })();
+
+twitter.getFavorites(function(err, data) {
+    data = JSON.parse(data);
+    console.log(data.length);
+    data.forEach(function(item) {
+        console.log(item.text);
+    });
+});
 
 
 /*
