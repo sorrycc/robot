@@ -178,7 +178,8 @@ var parseResults = function(err, results) {
         html.push('<h2>Twitter Favorites</h2>');
         JSON.parse(results[2]).forEach(function(item) {
             if (data['twitter'][item.id]) return;
-            html.push(item.create_at + ' ' + item.user.name + ' : ' + linkify(item.text));
+            var created_at = item.created_at.split(' ').slice(0,4).join(' ');
+            html.push(created_at + ' ' + item.user.name + ' : ' + linkify(item.text) + '<br>');
             twitterData.push(item.id);
         });
     }
@@ -187,7 +188,8 @@ var parseResults = function(err, results) {
         html.push('<h2>Twitter List</h2>');
         JSON.parse(results[3]).forEach(function(item) {
             if (data['twitter'][item.id]) return;
-            html.push(item.create_at + ' ' + item.user.name + ' : ' + linkify(item.text));
+            var created_at = item.created_at.split(' ').slice(0,4).join(' ');
+            html.push(created_at + ' ' + item.user.name + ' : ' + linkify(item.text) + '<br>');
             twitterData.push(item.id);
         });
     }
