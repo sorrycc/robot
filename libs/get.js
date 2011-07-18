@@ -174,27 +174,27 @@ var parseResults = function(err, results) {
         });
     }
     
-    if (results[2] && _.isArray(results[2])) {
+    if (results[2] && _.isString(results[2])) {
         html.push('<h2>Twitter Favorites</h2>');
-        results[2].forEach(function(item) {
+        JSON.parse(results[2]).forEach(function(item) {
             if (data['twitter'][item.id]) return;
             html.push(item.create_at + ' ' + item.user.name + ' : ' + linkify(item.text));
             twitterData.push(item.id);
         });
     }
     
-    if (results[3] && _.isArray(results[3])) {
+    if (results[3] && _.isString(results[3])) {
         html.push('<h2>Twitter List</h2>');
-        results[3].forEach(function(item) {
+        JSON.parse(results[3]).forEach(function(item) {
             if (data['twitter'][item.id]) return;
             html.push(item.create_at + ' ' + item.user.name + ' : ' + linkify(item.text));
             twitterData.push(item.id);
         });
     }
     
-    writeFileAppend('./data/reddit', redditData.join('\n'));
+    writeFileAppend('./data/reddit',     redditData.join('\n'));
     writeFileAppend('./data/hackernews', hackerNewsData.join('\n'));
-    writeFileAppend('./data/twitter', twitterData.join('\n'));
+    writeFileAppend('./data/twitter',    twitterData.join('\n'));
     
     console.log(html.join('\n'));
     sendMail(html.join(''));
