@@ -154,44 +154,50 @@ var parseResults = function(err, results) {
     var hackerNewsData = [];
     var twitterData = [];
     
+    html.push('<style>body{line-height:1.5;}.tweets{line-height:1.2;}.tweet{margin:6px 0;}.tweet b{color:green;}</style>');
+    
     if (results[0] && _.isArray(results[0])) {
-        html.push('<h2>Reddit</h2>');
+        html.push('<h2>Reddit</h2><div class="list">');
         results[0].forEach(function(item) {
             if (data['reddit'][item.link]) return;
             var space = item.vote.length === 2 ? '  ' : ' ';
             html.push('('+item.vote+')' + space + '<a href="'+item.link+'">'+item.text+'</a><br>');
             redditData.push(item.link);
         });
+        html.push('</div>');
     }
     
     if (results[1] && _.isArray(results[1])) {
-        html.push('<h2>HackerNews</h2>');
+        html.push('<h2>HackerNews</h2><div class="list">');
         results[1].forEach(function(item) {
             if (data['hackernews'][item.link]) return;
             var space = item.point.length === 2 ? '  ' : ' ';
             html.push('('+item.point+')' + space + '<a href="'+item.link+'">'+item.text+'</a><br>');
             hackerNewsData.push(item.link);
         });
+        html.push('</div>');
     }
     
     if (results[2] && _.isString(results[2])) {
-        html.push('<h2>Twitter Favorites</h2>');
+        html.push('<h2>Twitter Favorites</h2><div class="tweets">');
         JSON.parse(results[2]).forEach(function(item) {
             if (data['twitter'][item.id]) return;
             var created_at = item.created_at.split(' ').slice(0,4).join(' ');
             html.push(created_at + ' ' + item.user.name + ' : ' + linkify(item.text) + '<br>');
             twitterData.push(item.id);
         });
+        html.push('</div>');
     }
     
     if (results[3] && _.isString(results[3])) {
-        html.push('<h2>Twitter List</h2>');
+        html.push('<h2>Twitter List</h2><div class="tweets">');
         JSON.parse(results[3]).forEach(function(item) {
             if (data['twitter'][item.id]) return;
             var created_at = item.created_at.split(' ').slice(0,4).join(' ');
-            html.push(created_at + ' ' + item.user.name + ' : ' + linkify(item.text) + '<br>');
+            html.push('<div class="tweet">' + created_at + ' <b>' + item.user.name + '</b> : ' + linkify(item.text) + '</div>');
             twitterData.push(item.id);
         });
+        html.push('</div>');
     }
     
     writeFileAppend('./data/reddit',     redditData.join('\n'));
