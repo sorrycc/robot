@@ -1,2 +1,3 @@
-config.js
-data/*
+libs/config.js
+libs/data/*
+
