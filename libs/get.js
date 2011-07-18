@@ -200,6 +200,7 @@ var parseResults = function(err, results) {
     
     console.log(html.join('\n'));
     sendMail(html.join(''));
+    // writeFile(html);
 };
 
 var sendMail = function(html) {
@@ -210,16 +211,42 @@ var sendMail = function(html) {
                 to:      g_config.mail.to,
                 subject: g_config.mail.subject + ' @ ' + new Date()
             });
-    message.attach_alternative(html);
-    console.log('sending mail');
-    server.send(message, function(err, message) {
-        console.log(err || 'mail sent'.bold.green);
+    message.attach_alternative('simple text');
+    writeFile(html, function(err, path) {
+        message.attach(path, "text/html", path.split('/').slice(-1)[0]);
+        console.log('sending mail');
+        server.send(message, function(err, message) {
+            console.log(err || message);
+        });
     });
 };
 
 var writeFileAppend = function(path, data) {
     var file = fs.createWriteStream(path, {flags:'a'});
     file.write(data);
+};
+
+var writeFile = function(data, callback) {
+    if (!path.existsSync('./data/html')) {
+        exec('mkdir ./data/html', function(err) {
+            if (err) {
+                callback(err);
+                return;
+            }
+            write();
+        });
+    } else {
+        write();
+    }
+    
+    function write() {
+        var filename = (''+new Date()).split(' ').slice(0, 5).join('_').replace(/:/g, '_');
+        var filepath = path.join(__dirname, './data/html/', filename + '.html');
+        fs.writeFile(filepath, data, 'utf8', function(err) {
+            if (err) throw err;
+            callback(null, filepath);
+        });
+    }
 };
 
 var doGet = function() {
