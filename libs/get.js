@@ -140,7 +140,7 @@ var twitter = (function() {
 
 
 //////////////////////////////////////////////////////
-// Run
+// Helpers
 
 var parseResults = function(err, results) {
     if (err) {
@@ -200,7 +200,6 @@ var parseResults = function(err, results) {
     
     console.log(html.join('\n'));
     sendMail(html.join(''));
-    // writeFile(html);
 };
 
 var sendMail = function(html) {
@@ -211,7 +210,7 @@ var sendMail = function(html) {
                 to:      g_config.mail.to,
                 subject: g_config.mail.subject + ' @ ' + new Date()
             });
-    message.attach_alternative('simple text');
+    message.attach_alternative('please view detail in attach html file.');
     writeFile(html, function(err, path) {
         message.attach(path, "text/html", path.split('/').slice(-1)[0]);
         console.log('sending mail');
@@ -249,9 +248,13 @@ var writeFile = function(data, callback) {
     }
 };
 
+
+//////////////////////////////////////////////////////
+// Do
+
 var doGet = function() {
     async.series([
-            async.apply(getReddit, {totalPage:1})
+            async.apply(getReddit)
           , async.apply(getHackerNews)
           , async.apply(twitter.getFavorites)
           , async.apply(twitter.getList, '50273431')
