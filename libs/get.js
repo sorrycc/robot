@@ -211,6 +211,7 @@ var sendMail = function(html) {
                 subject: g_config.mail.subject + ' @ ' + new Date()
             });
     message.attach_alternative(html);
+    console.log('sending mail');
     server.send(message, function(err, message) {
         console.log(err || 'mail sent'.bold.green);
     });
