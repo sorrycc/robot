@@ -202,9 +202,9 @@ var parseResults = function(err, results) {
         html.push('</div>');
     }
     
-    writeFileAppend('./data/reddit',     redditData.join('\n'));
-    writeFileAppend('./data/hackernews', hackerNewsData.join('\n'));
-    writeFileAppend('./data/twitter',    twitterData.join('\n'));
+    writeFileAppend('./data/reddit',     '\n'+redditData.join('\n'));
+    writeFileAppend('./data/hackernews', '\n'+hackerNewsData.join('\n'));
+    writeFileAppend('./data/twitter',    '\n'+twitterData.join('\n'));
     
     console.log(html.join('\n'));
     sendMail(html.join(''));
